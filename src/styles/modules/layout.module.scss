@@ -1,0 +1,28 @@
+.container{
+    max-width:1100px;
+    margin:0 auto;
+    padding:2rem
+}
+.hero{
+    padding:4rem 2rem;
+    background:linear-gradient(90deg, rgba(11,95,255,0.06), transparent);
+    border-radius:8px
+}
+.hero h1{
+    margin:0 0 0.5rem
+}
+.cta{
+    margin:2rem 0
+}
+.button{
+    display:inline-block;
+    padding:0.8rem 1.2rem;
+    background:var(--primary);
+    color:white;
+    border-radius:8px
+}
+.footer{
+    margin-top:3rem;
+    padding:2rem 0;
+    color:rgba(0,0,0,0.6)
+}

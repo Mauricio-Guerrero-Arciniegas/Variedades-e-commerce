@@ -1,0 +1,26 @@
+.navbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:1rem 2rem;
+  border-bottom:1px solid rgba(0,0,0,0.06);
+  background:white;
+}
+.brand a{
+    font-weight:700;
+    font-size:1.25rem
+}
+.links{
+    display:flex;
+    gap:1rem;
+    align-items:center
+}
+.cart{
+    background:rgba(11,95,255,0.08);
+    padding:0.4rem 0.6rem;
+    border-radius:6px
+}
+
+@media(max-width:600px){
+  .links{gap:0.6rem}
+}
