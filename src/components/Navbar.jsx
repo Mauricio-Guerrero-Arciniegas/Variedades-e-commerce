@@ -4,7 +4,7 @@ import { useCart } from '../context/CartContext'
 
 export default function Navbar() {
   const { cart } = useCart()
-  const totalItems = cart.reduce((s, p) => s + p.qty, 0)
+  const totalItems = cart.reduce((s, p) => s + (p.quantity || 0), 0)
 
   return (
     <header className={styles.navbar}>
@@ -14,7 +14,10 @@ export default function Navbar() {
       <nav className={styles.links}>
         <Link href="/products">Productos</Link>
         <a href="#contact">Contacto</a>
-        <div className={styles.cart}>Carrito ({totalItems})</div>
+        <Link href="/cart" className={styles.cart}>
+          <span>Carrito</span>
+          {totalItems > 0 && <span className={styles.badge}>{totalItems}</span>}
+        </Link>
       </nav>
     </header>
   )
