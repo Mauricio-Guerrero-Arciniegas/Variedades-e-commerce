@@ -14,7 +14,14 @@ export default function ProductCard({ product }) {
         <h3>{product.title}</h3>
         <p className={styles.price}>${product.price.toFixed(2)}</p>
         <div className={styles.actions}>
-          <button onClick={() => addToCart(product)}>Agregar al carrito</button>
+          <button
+            onClick={() => {
+              console.log('Producto agregado:', product)
+              addToCart(product)
+            }}
+          >
+            Agregar al carrito
+          </button>
           <Link href={`/products/${product.slug}`} className={styles.view}>Ver</Link>
         </div>
       </div>

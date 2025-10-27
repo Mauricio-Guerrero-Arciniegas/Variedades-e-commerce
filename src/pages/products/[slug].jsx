@@ -6,7 +6,6 @@ import styles from '../../styles/modules/products.module.scss'
 import { useState } from 'react'
 import { useCart } from '../../context/CartContext'
 
-// same sample data (in a real app move to a shared module or API)
 const PRODUCTS = [
   {
     id: 'bag-1',
@@ -45,12 +44,26 @@ export default function ProductPage() {
   const [showModal, setShowModal] = useState(false)
   const { addToCart } = useCart()
 
-  if (!product) return (
-    <div>
-      <Navbar />
-      <main className={styles.container}><p>Cargando...</p></main>
-    </div>
-  )
+  if (!product) {
+    return (
+      <div>
+        <Navbar />
+        <main className={styles.container}>
+          <p>Cargando...</p>
+        </main>
+      </div>
+    )
+  }
+
+  const handleAddToCart = () => {
+    addToCart({
+      id: product.id,
+      name: product.title,
+      image: product.images[0],
+      price: product.price,
+      quantity: 1
+    })
+  }
 
   return (
     <div>
@@ -62,16 +75,22 @@ export default function ProductPage() {
           <div className={styles.info}>
             <h1>{product.title}</h1>
             <p className={styles.price}>${product.price.toFixed(2)}</p>
-            <p>Categoria: {product.category}</p>
+            <p>Categoría: {product.category}</p>
+
             <div className={styles.actions}>
-              <button onClick={() => addToCart(product)}>Agregar al carrito</button>
+              <button onClick={handleAddToCart}>Agregar al carrito</button>
               <button onClick={() => setShowModal(true)}>Comprar ahora</button>
             </div>
           </div>
         </div>
       </main>
 
-      {showModal && <ModalPurchase product={product} onClose={() => setShowModal(false)} />}
+      {showModal && (
+        <ModalPurchase
+          product={product}
+          onClose={() => setShowModal(false)}
+        />
+      )}
     </div>
   )
 }

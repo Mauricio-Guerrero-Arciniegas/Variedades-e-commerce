@@ -1,24 +1,26 @@
+'use client'
 import Link from 'next/link'
-import styles from '../styles/modules/navbar.module.scss'
 import { useCart } from '../context/CartContext'
+import styles from '../styles/modules/navbar.module.scss'
 
 export default function Navbar() {
   const { cart } = useCart()
-  const totalItems = cart.reduce((s, p) => s + (p.quantity || 0), 0)
+  const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0)
 
   return (
-    <header className={styles.navbar}>
-      <div className={styles.brand}>
-        <Link href="/">Mi Tienda</Link>
+    <nav className={styles.navbar}>
+      <div className={styles.logo}>
+        <Link href="/">MiTienda</Link>
       </div>
-      <nav className={styles.links}>
+
+      <div className={styles.links}>
+        <Link href="/">Inicio</Link>
         <Link href="/products">Productos</Link>
-        <a href="#contact">Contacto</a>
-        <Link href="/cart" className={styles.cart}>
-          <span>Carrito</span>
+        <Link href="/cart" className={styles.cartLink}>
+          🛒 Carrito
           {totalItems > 0 && <span className={styles.badge}>{totalItems}</span>}
         </Link>
-      </nav>
-    </header>
+      </div>
+    </nav>
   )
 }

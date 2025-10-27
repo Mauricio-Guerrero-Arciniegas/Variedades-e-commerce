@@ -1,35 +1,51 @@
 'use client';
+import Navbar from '../components/Navbar';
 import { useCart } from '../context/CartContext';
 import styles from '../styles/modules/cart.module.scss';
 
-export default function Cart() {
-  const { cart } = useCart();
-
-  if (cart.length === 0) {
-    return <div className={styles.empty}>🛒 Tu carrito está vacío</div>;
-  }
+export default function CartPage() {
+  const { cart, removeFromCart, clearCart, increaseQty, decreaseQty, totalPrice } = useCart();
 
   return (
-    <div className={styles.cart}>
-      <h2>🛍️ Carrito de Compras</h2>
-      <ul className={styles.list}>
-        {cart.map((item) => (
-          <li key={item.id} className={styles.item}>
-            <img src={item.image} alt={item.name} />
-            <div>
-              <h4>{item.name}</h4>
-              <p>Cantidad: {item.quantity}</p>
-              <p>Precio: ${(item.price * item.quantity).toFixed(2)}</p>
+    <div>
+      <Navbar />
+      <main className={styles.container}>
+        <h2>Carrito de compras</h2>
+
+        {cart.length === 0 ? (
+          <p>Tu carrito está vacío 🛒</p>
+        ) : (
+          <>
+            <ul className={styles.cartList}>
+              {cart.map((item) => (
+                <li key={item.id} className={styles.item}>
+                  <img src={item.images[0]} alt={item.title} />
+                  <div className={styles.details}>
+                    <h3>{item.title}</h3>
+                    <p>Precio: ${item.price.toFixed(2)}</p>
+
+                    <div className={styles.qtyControls}>
+                      <button onClick={() => decreaseQty(item.id)}>-</button>
+                      <span>{item.quantity}</span>
+                      <button onClick={() => increaseQty(item.id)}>+</button>
+                    </div>
+
+                    <p>Subtotal: ${(item.price * item.quantity).toFixed(2)}</p>
+                    <button className={styles.removeBtn} onClick={() => removeFromCart(item.id)}>
+                      Eliminar
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+
+            <div className={styles.summary}>
+              <p><strong>Total:</strong> ${totalPrice.toFixed(2)}</p>
+              <button onClick={clearCart} className={styles.clearBtn}>Vaciar carrito</button>
             </div>
-          </li>
-        ))}
-      </ul>
-      <div className={styles.total}>
-        Total: $
-        {cart
-          .reduce((acc, item) => acc + item.price * item.quantity, 0)
-          .toFixed(2)}
-      </div>
+          </>
+        )}
+      </main>
     </div>
   );
 }
