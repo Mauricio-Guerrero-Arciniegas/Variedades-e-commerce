@@ -29,7 +29,34 @@ const PRODUCTS = [
     category: 'Ropa',
     price: 60000,
     description: 'Blusa ligera con estampado floral, ideal para outfits casuales.',
-    images: ['/images/blusas/blusa2.webp']
+    images: ['/images/ropa/blusa_floral/blusa2.webp']
+  },
+  {
+    id: 'cl-2',
+    slug: 'pantalon-dama',
+    title: 'Pantalón-Negro',
+    category: 'Ropa',
+    price: 70000,
+    description: 'Pantalón negro ligero, perfecto para cualquier ocasión.',
+    images: ['/images/ropa/pantalon/pantalon1.webp']
+  },
+  {
+    id: 'cl-3',
+    slug: 'camiseta-dama',
+    title: 'Camiseta Estampada',
+    category: 'Ropa',
+    price: 45000,
+    description: 'Camiseta con estampado.',
+    images: ['/images/ropa/camiseta/camiseta1.webp']
+  },
+  {
+    id: 'cl-4',
+    slug: 'accesorios-dama',
+    title: 'Collar Tulipan',
+    category: 'Accesorios',
+    price: 62500,
+    description: 'Accesorios de moda.',
+    images: ['/images/accesorios/collar/collar1.webp']
   }
 ]
 

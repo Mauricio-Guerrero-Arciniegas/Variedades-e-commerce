@@ -97,64 +97,6 @@
         font-size: 1rem;
       }
     }
-
-    .cartActions {
-      display: flex;
-      justify-content: center;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      margin-top: 0.5rem;
-
-      .removeBtn,
-      .buyNowBtn {
-        flex: 1 1 auto;
-        max-width: 150px;
-        min-width: 120px;
-        padding: 0.5rem 0;
-        border-radius: 8px;
-        font-weight: 600;
-        font-size: 0.95rem;
-        cursor: pointer;
-        border: none;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.25s ease;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-      }
-
-      .removeBtn {
-        background: #fff;
-        color: #e53935;
-        border: 1px solid #e53935;
-
-        &:hover {
-          background: #e53935;
-          color: #fff;
-          transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        &:active {
-          transform: translateY(1px);
-        }
-      }
-
-      .buyNowBtn {
-        background: linear-gradient(135deg, #0b5fff, #084bcb);
-        color: #fff;
-        border: none;
-
-        &:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
-
-        &:active {
-          transform: translateY(1px);
-        }
-      }
-    }
   }
 }
 
@@ -166,14 +108,109 @@
   color: #222;
 }
 
+/* --- Botones estilo Amazon --- */
+
+.cartButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-top: 1.5rem;
+
+  @media (min-width: 600px) {
+    flex-direction: row;
+    justify-content: center;
+  }
+}
+
+.keepShoppingBtn,
+.buyNowBtn,
+.removeBtn {
+  flex: 1 1 auto;
+  min-width: 150px;
+  padding: 0.8rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-decoration: none; /* para los <Link> */
+}
+
+/* Seguir comprando */
+.keepShoppingBtn {
+  background: #f3f3f3;
+  border: 1px solid #d5d9d9;
+  color: #0f1111;
+
+  &:hover {
+    background: #e7e9ec;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+/* Comprar ahora */
+.buyNowBtn {
+  background: linear-gradient(180deg, #f7dfa5, #f0c14b);
+  border: 1px solid #a88734;
+  color: #111;
+
+  &:hover {
+    background: linear-gradient(180deg, #f5d68a, #eeb933);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+/* Vaciar carrito */
+.removeBtn {
+  background: #fef0f0;
+  border: 1px solid #d93025;
+  color: #b12704;
+
+  &:hover {
+    background: #d93025;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(217, 48, 37, 0.4);
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+/* 🛒 Estado vacío: centrado y con botón igual al de "Seguir comprando" */
 .empty {
   text-align: center;
   padding: 3rem;
   font-size: 1.3rem;
-  color: #888;
+  color: #666;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+
+  a.keepShoppingBtn {
+    @extend .keepShoppingBtn;
+    min-width: 180px;
+  }
 }
 
-/* Responsive: escritorio */
+/* --- Responsive: escritorio --- */
 @media (min-width: 768px) {
   .cart {
     flex-direction: row;
@@ -202,10 +239,6 @@
     .details {
       text-align: left;
       margin-left: 1rem;
-    }
-
-    .cartActions {
-      justify-content: flex-start;
     }
   }
 }

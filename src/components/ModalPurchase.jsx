@@ -18,7 +18,7 @@ export default function ModalPurchase({ product, onClose }) {
 
   const items = product ? [product] : cart || [];
 
-  // 🔹 Función para formatear en pesos colombianos sin decimales
+  // 🔹 Formateo de pesos colombianos
   const formatCOP = (value) =>
     new Intl.NumberFormat('es-CO', {
       style: 'currency',
@@ -54,29 +54,41 @@ export default function ModalPurchase({ product, onClose }) {
 
     try {
       const data = new FormData();
-      data.append('file', formData.file);
+
+      // 🔹 Compatibilidad con Safari/iOS al crear el archivo correctamente
+      if (formData.file && formData.file.type.startsWith('image/')) {
+        const blob = formData.file.slice(0, formData.file.size, formData.file.type);
+        const file = new File([blob], formData.file.name, { type: formData.file.type });
+        data.append('file', file);
+      } else {
+        data.append('file', formData.file);
+      }
+
       data.append('upload_preset', 'Comprobantes');
 
-      const res = await fetch(
-        'https://api.cloudinary.com/v1_1/dkfbhn3ht/image/upload',
-        { method: 'POST', body: data }
-      );
+      // ✅ Carga en Cloudinary (sin headers, deja que el browser maneje multipart/form-data)
+      const res = await fetch('https://api.cloudinary.com/v1_1/dkfbhn3ht/image/upload', {
+        method: 'POST',
+        body: data,
+      });
 
       const result = await res.json();
 
-      if (!res.ok) {
-        alert('Error al subir el comprobante');
-        setUploading(false);
-        return;
+      if (!res.ok || !result.secure_url) {
+        throw new Error('Error al subir el comprobante');
       }
 
       fileUrl = result.secure_url;
     } catch (err) {
-      alert('Error al subir el comprobante');
-    } finally {
+      console.error('Error al subir el comprobante:', err);
+      alert('Error al subir el comprobante. Intenta nuevamente.');
       setUploading(false);
+      return;
     }
 
+    setUploading(false);
+
+    // 🧾 Construir mensaje de pedido
     const total = items.reduce(
       (acc, item) => acc + item.price * (item.quantity || 1),
       0
@@ -99,7 +111,11 @@ export default function ModalPurchase({ product, onClose }) {
       message
     )}`;
 
-    window.open(whatsappUrl, '_blank');
+    // ✅ Safari / iOS-friendly redirect
+    setTimeout(() => {
+      window.location.href = whatsappUrl;
+    }, 300);
+
     onClose();
   };
 
@@ -123,7 +139,7 @@ export default function ModalPurchase({ product, onClose }) {
           </button>
         </div>
 
-        {/* Scrollable content */}
+        {/* Contenido scrollable */}
         <div className={styles.modalBody}>
           <div className={styles.summary}>
             <h3>Resumen del pedido</h3>
@@ -149,6 +165,7 @@ export default function ModalPurchase({ product, onClose }) {
             </div>
           </div>
 
+          {/* Formulario */}
           <form id="purchase-form" onSubmit={handleSubmit}>
             <div className={styles.formGroup}>
               <label>Nombre completo</label>
@@ -223,7 +240,7 @@ export default function ModalPurchase({ product, onClose }) {
           </form>
         </div>
 
-        {/* ✅ Fixed footer with total */}
+        {/* Footer fijo */}
         <div className={styles.fixedFooter}>
           <button
             type="submit"

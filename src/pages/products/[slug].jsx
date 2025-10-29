@@ -44,13 +44,57 @@ const PRODUCTS = [
     slug: 'blusa-floral',
     title: 'Blusa Floral',
     category: 'Ropa',
-    price: 55000,
+    price: 60000,
     description: 'Blusa ligera con estampado floral. Ideal para el día a día o eventos casuales.',
     images: [
-      '/images/blusas/blusa1.webp',
-      '/images/blusas/blusa2.webp',
-      '/images/blusas/blusa3.webp',
-      '/images/blusas/blusa4.webp'
+      '/images/ropa/blusa_floral/blusa1.webp',
+      '/images/ropa/blusa_floral/blusa2.webp',
+      '/images/ropa/blusa_floral/blusa3.webp',
+      '/images/ropa/blusa_floral/blusa4.webp'
+    ]
+  },
+  {
+    id: 'cl-2',
+    slug: 'pantalon-dama',
+    title: 'Pantalón-Negro',
+    category: 'Ropa',
+    price: 70000,
+    description: 'Pantalón negro ligero, perfecto para cualquier ocasión.',
+    images: [
+      '/images/ropa/pantalon/pantalon1.webp',
+      '/images/ropa/pantalon/pantalon2.webp',
+      '/images/ropa/pantalon/pantalon3.webp',
+      '/images/ropa/pantalon/pantalon4.webp'
+    ]
+  },
+  {
+    id: 'cl-3',
+    slug: 'camiseta-dama',
+    title: 'Camiseta Estampada',
+    category: 'Ropa',
+    price: 45000,
+    description: 'Camiseta con estampado.',
+    images: [
+      '/images/ropa/camiseta/camiseta1.webp',
+      '/images/ropa/camiseta/camiseta2.webp',
+      '/images/ropa/camiseta/camiseta3.webp',
+      '/images/ropa/camiseta/camiseta4.webp'
+    ]
+  },
+  {
+    id: 'cl-4',
+    slug: 'accesorios-dama',
+    title: 'Collar Tulipán',
+    category: 'Accesorios',
+    price: 62500,
+    description: 'Accesorios de moda.',
+    images: [
+      '/images/accesorios/collar/collar1.webp',
+      '/images/accesorios/collar/collar2.webp',
+      '/images/accesorios/collar/collar3.webp',
+      '/images/accesorios/collar/collar4.webp',
+      '/images/accesorios/collar/collar5.webp',
+      '/images/accesorios/collar/collar6.webp'
     ]
   }
 ]

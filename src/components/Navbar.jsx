@@ -7,15 +7,22 @@ import styles from '../styles/modules/navbar.module.scss'
 export default function Navbar() {
   const { cart } = useCart()
   const [mounted, setMounted] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
     setMounted(true)
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0)
 
   return (
-    <nav className={styles.navbar}>
+    <nav className={`${styles.navbar} ${scrolled ? styles.scrolled : ''}`}>
       <div className={styles.logo}>
         <Link href="/">MiTienda</Link>
       </div>
@@ -25,7 +32,9 @@ export default function Navbar() {
         <Link href="/products">Productos</Link>
         <Link href="/cart" className={styles.cartLink}>
           🛒 Carrito
-          {mounted && totalItems > 0 && <span className={styles.badge}>{totalItems}</span>}
+          {mounted && totalItems > 0 && (
+            <span className={styles.badge}>{totalItems}</span>
+          )}
         </Link>
       </div>
     </nav>
