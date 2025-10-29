@@ -107,7 +107,7 @@ export default function Home() {
       {/* Cuenta 1 */}
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
         <a
-          href="https://www.instagram.com/tu_cuenta_1"
+          href="https://www.instagram.com/market.rose"
           target="_blank"
           rel="noopener noreferrer"
           style={{
@@ -127,14 +127,14 @@ export default function Home() {
           <FaInstagram />
         </a>
         <span style={{ fontSize: "0.9rem", color: "#ddd", marginTop: "0.4rem" }}>
-          @tu_cuenta_1
+          @Market Rosé
         </span>
       </div>
 
       {/* Cuenta 2 */}
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
         <a
-          href="https://www.instagram.com/tu_cuenta_2"
+          href="https://www.instagram.com/cafeauroraoficial"
           target="_blank"
           rel="noopener noreferrer"
           style={{
@@ -154,7 +154,7 @@ export default function Home() {
           <FaInstagram />
         </a>
         <span style={{ fontSize: "0.9rem", color: "#ddd", marginTop: "0.4rem" }}>
-          @tu_cuenta_2
+          @Café Aurora
         </span>
       </div>
     </div>
