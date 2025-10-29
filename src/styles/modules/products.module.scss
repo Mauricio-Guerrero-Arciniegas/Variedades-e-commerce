@@ -36,3 +36,34 @@
 @media(max-width:600px){
   .grid{grid-template-columns:1fr}
 }
+
+.productPage img {
+  width: 100%;
+  height: auto;
+  object-fit: contain; /* mantiene proporción sin recortar */
+  border-radius: 8px;
+  display: block;
+  margin: 0 auto;
+  background-color: #f8f8f8; /* opcional, mejora contraste en imágenes pequeñas */
+  max-height: 500px; /* evita que sean gigantes en pantallas grandes */
+}
+
+.filters button {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  border: 1px solid rgba(0,0,0,0.1);
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filters button:hover {
+  background: var(--primary);
+  color: white;
+}
+
+.filters .active {
+  background: var(--primary);
+  color: white;
+  font-weight: bold;
+}

@@ -1,53 +1,69 @@
 import Navbar from '../../components/Navbar'
 import ProductCard from '../../components/ProductCard'
 import styles from '../../styles/modules/products.module.scss'
+import { useState } from 'react'
 
-// Sample product data — in the future fetch from an API
 const PRODUCTS = [
   {
     id: 'bag-1',
-    slug: 'bolso-rosa',
-    title: 'Bolso Rosa Elegante',
+    slug: 'bolso-cuero',
+    title: 'Bolso Azul-Beige',
     category: 'Bolsos',
-    price: 59.99,
-    images: [
-      'https://images.unsplash.com/photo-1520975911094-d8d2f4b1e9d2?auto=format&fit=crop&w=800&q=60',
-      'https://images.unsplash.com/photo-1520976279501-2d7d0a1d4c4c?auto=format&fit=crop&w=800&q=60',
-      'https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?auto=format&fit=crop&w=800&q=60',
-      'https://images.unsplash.com/photo-1520975911094-d8d2f4b1e9d2?auto=format&fit=crop&w=801&q=60',
-      'https://images.unsplash.com/photo-1520976279501-2d7d0a1d4c4c?auto=format&fit=crop&w=802&q=60'
-    ]
+    price: 50000,
+    images: ['/images/bolsos/bag-1/bolso1.webp']
+  },
+  {
+    id: 'bag-2',
+    slug: 'bolso-rosa',
+    title: 'Bolso Beige-Rojo',
+    category: 'Bolsos',
+    price: 50000,
+    images: ['/images/bolsos/bag-2/bolso1.webp']
   },
   {
     id: 'cl-1',
     slug: 'blusa-floral',
     title: 'Blusa Floral',
     category: 'Ropa',
-    price: 29.99,
-    images: [
-      'https://images.unsplash.com/photo-1495121605193-b116b5b09d16?auto=format&fit=crop&w=800&q=60',
-      'https://images.unsplash.com/photo-1520975911094-d8d2f4b1e9d2?auto=format&fit=crop&w=800&q=60',
-      'https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?auto=format&fit=crop&w=800&q=60',
-      'https://images.unsplash.com/photo-1495121605193-b116b5b09d16?auto=format&fit=crop&w=801&q=60',
-      'https://images.unsplash.com/photo-1520976279501-2d7d0a1d4c4c?auto=format&fit=crop&w=802&q=60'
-    ]
+    price: 60000,
+    images: ['/images/blusas/blusa2.webp']
   }
 ]
 
 export default function Products() {
-  const categories = Array.from(new Set(PRODUCTS.map(p => p.category)))
+  const categories = ['Todos', ...new Set(PRODUCTS.map(p => p.category))]
+  const [selectedCategory, setSelectedCategory] = useState('Todos')
+
+  // 🔥 Filtra productos según la categoría seleccionada
+  const filteredProducts =
+    selectedCategory === 'Todos'
+      ? PRODUCTS
+      : PRODUCTS.filter(p => p.category === selectedCategory)
 
   return (
     <div>
       <Navbar />
       <main className={styles.container}>
         <h1>Productos</h1>
+
+        {/* botones de filtro */}
         <div className={styles.filters}>
-          {categories.map(c => (<button key={c}>{c}</button>))}
+          {categories.map(c => (
+            <button
+              key={c}
+              onClick={() => setSelectedCategory(c)}
+              className={selectedCategory === c ? styles.active : ''}
+            >
+              {c}
+            </button>
+          ))}
         </div>
 
+        {/* productos filtrados */}
         <section className={styles.grid}>
-          {PRODUCTS.map(p => (<ProductCard key={p.id} product={p} />))}
+          {filteredProducts.map(p => (
+            <ProductCard key={p.id} product={p} />
+          ))}
         </section>
       </main>
     </div>

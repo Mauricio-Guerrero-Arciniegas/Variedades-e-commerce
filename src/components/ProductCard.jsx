@@ -7,12 +7,16 @@ export default function ProductCard({ product }) {
 
   return (
     <article className={styles.card}>
-      <div className={styles.thumb}>
-        <img src={product.images[0]} alt={product.title} />
-      </div>
+      <Link href={`/products/${product.slug}`} className={styles.thumb}>
+        <div className={styles.imageWrapper}>
+          <img src={product.images[0]} alt={product.title} />
+        </div>
+      </Link>
+
       <div className={styles.body}>
         <h3>{product.title}</h3>
         <p className={styles.price}>${product.price.toFixed(2)}</p>
+
         <div className={styles.actions}>
           <button
             onClick={() => {
@@ -22,7 +26,10 @@ export default function ProductCard({ product }) {
           >
             Agregar al carrito
           </button>
-          <Link href={`/products/${product.slug}`} className={styles.view}>Ver</Link>
+
+          <Link href={`/products/${product.slug}`} className={styles.view}>
+            Ver
+          </Link>
         </div>
       </div>
     </article>

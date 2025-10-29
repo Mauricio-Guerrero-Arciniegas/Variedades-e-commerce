@@ -9,30 +9,47 @@ import { useCart } from '../../context/CartContext'
 const PRODUCTS = [
   {
     id: 'bag-1',
+    slug: 'bolso-cuero',
+    title: 'Bolso Azul Elegante',
+    category: 'Bolsos',
+    price: 60000,
+    images: [
+      '/images/bolsos/bag-1/bolso1.webp',
+      '/images/bolsos/bag-1/bolso2.webp',
+      '/images/bolsos/bag-1/bolso3.webp',
+      '/images/bolsos/bag-1/bolso4.webp',
+      '/images/bolsos/bag-1/bolso5.webp',
+      '/images/bolsos/bag-1/bolso6.webp',
+      '/images/bolsos/bag-1/bolso7.webp',
+      '/images/bolsos/bag-1/bolso8.webp',
+    ]
+  },
+
+{
+    id: 'bag-2',
     slug: 'bolso-rosa',
     title: 'Bolso Rosa Elegante',
     category: 'Bolsos',
-    price: 59.99,
+    price: 60000,
     images: [
-      'https://images.unsplash.com/photo-1520975911094-d8d2f4b1e9d2?auto=format&fit=crop&w=800&q=60',
-      'https://images.unsplash.com/photo-1520976279501-2d7d0a1d4c4c?auto=format&fit=crop&w=800&q=60',
-      'https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?auto=format&fit=crop&w=800&q=60',
-      'https://images.unsplash.com/photo-1520975911094-d8d2f4b1e9d2?auto=format&fit=crop&w=801&q=60',
-      'https://images.unsplash.com/photo-1520976279501-2d7d0a1d4c4c?auto=format&fit=crop&w=802&q=60'
+      '/images/bolsos/bag-2/bolso1.webp',
+      '/images/bolsos/bag-2/bolso2.webp',
+      '/images/bolsos/bag-2/bolso3.webp',
+      '/images/bolsos/bag-2/bolso4.webp'
     ]
   },
+
   {
     id: 'cl-1',
     slug: 'blusa-floral',
     title: 'Blusa Floral',
     category: 'Ropa',
-    price: 29.99,
+    price: 55000,
     images: [
-      'https://images.unsplash.com/photo-1495121605193-b116b5b09d16?auto=format&fit=crop&w=800&q=60',
-      'https://images.unsplash.com/photo-1520975911094-d8d2f4b1e9d2?auto=format&fit=crop&w=800&q=60',
-      'https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?auto=format&fit=crop&w=800&q=60',
-      'https://images.unsplash.com/photo-1495121605193-b116b5b09d16?auto=format&fit=crop&w=801&q=60',
-      'https://images.unsplash.com/photo-1520976279501-2d7d0a1d4c4c?auto=format&fit=crop&w=802&q=60'
+      '/images/blusas/blusa1.webp',
+      '/images/blusas/blusa2.webp',
+      '/images/blusas/blusa3.webp',
+      '/images/blusas/blusa4.webp'
     ]
   }
 ]
@@ -65,16 +82,24 @@ export default function ProductPage() {
     })
   }
 
+  // 💰 Función para formatear el precio en pesos colombianos
+  const formatPrice = value =>
+    new Intl.NumberFormat('es-CO', {
+      style: 'currency',
+      currency: 'COP',
+      minimumFractionDigits: 0
+    }).format(value)
+
   return (
     <div>
       <Navbar />
       <main className={styles.container}>
-        <div className={styles.productPage}>
-          <ProductCarousel images={product.images} />
+        <div key={product.id} className={styles.productPage}>
+          <ProductCarousel key={product.slug} images={product.images} />
 
           <div className={styles.info}>
             <h1>{product.title}</h1>
-            <p className={styles.price}>${product.price.toFixed(2)}</p>
+            <p className={styles.price}>{formatPrice(product.price)}</p>
             <p>Categoría: {product.category}</p>
 
             <div className={styles.actions}>
