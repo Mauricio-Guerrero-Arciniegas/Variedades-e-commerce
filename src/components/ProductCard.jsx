@@ -19,6 +19,9 @@ export default function ProductCard({ product }) {
         <p className={styles.description}>{product.description}</p> {/* <- Nueva línea */}
 
         <div className={styles.actions}>
+          <Link href={`/products/${product.slug}`} className={styles.view}>
+            Ver
+          </Link>
           <button
             onClick={() => {
               addToCart(product)
@@ -27,9 +30,6 @@ export default function ProductCard({ product }) {
             Agregar al carrito
           </button>
 
-          <Link href={`/products/${product.slug}`} className={styles.view}>
-            Ver
-          </Link>
         </div>
       </div>
     </article>

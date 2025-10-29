@@ -18,6 +18,14 @@ export default function ModalPurchase({ product, onClose }) {
 
   const items = product ? [product] : cart || [];
 
+  // 🔹 Función para formatear en pesos colombianos sin decimales
+  const formatCOP = (value) =>
+    new Intl.NumberFormat('es-CO', {
+      style: 'currency',
+      currency: 'COP',
+      minimumFractionDigits: 0,
+    }).format(value);
+
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     const file = files ? files[0] : null;
@@ -57,16 +65,13 @@ export default function ModalPurchase({ product, onClose }) {
       const result = await res.json();
 
       if (!res.ok) {
-        console.error('Error Cloudinary:', result);
         alert('Error al subir el comprobante');
         setUploading(false);
         return;
       }
 
       fileUrl = result.secure_url;
-      console.log('Archivo subido correctamente:', fileUrl);
     } catch (err) {
-      console.error('Error en fetch:', err);
       alert('Error al subir el comprobante');
     } finally {
       setUploading(false);
@@ -81,10 +86,11 @@ export default function ModalPurchase({ product, onClose }) {
     message += `📞 Teléfono: ${formData.phone}\n📧 Correo: ${formData.email}\n🏠 Dirección: ${formData.address}\n\n`;
     message += `🛍️ *Productos:*\n`;
     items.forEach((item) => {
-      message += `• ${item.title} (x${item.quantity || 1}) - $${item.price.toFixed(2)}\n`;
+      message += `• ${item.title} (x${item.quantity || 1}) - ${formatCOP(
+        item.price
+      )}\n`;
     });
-    message += `\n💰 *Total:* $${total.toFixed(2)}\n`;
-    message += `\n💳 *Realiza el pago por Nequi a este número:* 3001234567\n`;
+    message += `\n💰 *Total:* ${formatCOP(total)}\n`;
     if (formData.note) message += `📝 Nota: ${formData.note}\n`;
     message += `📸 Comprobante: ${fileUrl}\n`;
 
@@ -97,110 +103,139 @@ export default function ModalPurchase({ product, onClose }) {
     onClose();
   };
 
+  const handleOverlayClick = (e) => {
+    if (e.target === e.currentTarget) onClose();
+  };
+
+  const total = items.reduce(
+    (acc, item) => acc + item.price * (item.quantity || 1),
+    0
+  );
+
   return (
-    <div className={styles.modalOverlay}>
+    <div className={styles.modalOverlay} onClick={handleOverlayClick}>
       <div className={styles.modalContent}>
+        {/* Header */}
         <div className={styles.modalHeader}>
-          <h2>🧾 Resumen de compra</h2>
+          <h2>🧾 Confirmar compra</h2>
           <button onClick={onClose} className={styles.closeButton}>
             ✕
           </button>
         </div>
 
-        {items.length > 0 &&
-          items.map((item) => (
-            <div key={item.id} className={styles.summaryItem}>
-              <img src={item.image || item.images?.[0]} alt={item.title} />
-              <div>
-                <p>
-                  <strong>{item.title}</strong>
-                </p>
-                <p>Cantidad: {item.quantity || 1}</p>
-                <p>Precio: ${item.price?.toFixed(2) || '0.00'}</p>
+        {/* Scrollable content */}
+        <div className={styles.modalBody}>
+          <div className={styles.summary}>
+            <h3>Resumen del pedido</h3>
+            {items.map((item) => (
+              <div key={item.id} className={styles.summaryItem}>
+                <img src={item.images?.[0]} alt={item.title} />
+                <div>
+                  <p className={styles.title}>{item.title}</p>
+                  <p>Cantidad: {item.quantity}</p>
+                  <p>{formatCOP(item.price * item.quantity)}</p>
+                </div>
               </div>
+            ))}
+
+            <p className={styles.total}>
+              Total: <strong>{formatCOP(total)}</strong>
+            </p>
+
+            <div className={styles.paymentInfo}>
+              💳 Paga en <strong>Nequi</strong><br />
+              <span>3162508703</span><br />
+              <small>Fabiana Constanza Benavides O.</small>
             </div>
-          ))}
-
-        <form onSubmit={handleSubmit}>
-          <div className={styles.formGroup}>
-            <label>Nombre completo</label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-            />
           </div>
 
-          <div className={styles.formGroup}>
-            <label>Correo electrónico</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className={styles.formGroup}>
-            <label>Teléfono</label>
-            <input
-              type="tel"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className={styles.formGroup}>
-            <label>Dirección de envío</label>
-            <input
-              type="text"
-              name="address"
-              value={formData.address}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className={styles.formGroup}>
-            <label>Nota (opcional)</label>
-            <textarea
-              name="note"
-              rows="3"
-              value={formData.note}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className={styles.formGroup}>
-            <label>Comprobante de pago (imagen)</label>
-            <input
-              type="file"
-              name="file"
-              accept="image/*"
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          {previewUrl && (
-            <div className={styles.previewFile}>
-              <img src={previewUrl} alt="Vista previa del comprobante" />
+          <form id="purchase-form" onSubmit={handleSubmit}>
+            <div className={styles.formGroup}>
+              <label>Nombre completo</label>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
             </div>
-          )}
 
+            <div className={styles.formGroup}>
+              <label>Correo electrónico</label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className={styles.formGroup}>
+              <label>Teléfono</label>
+              <input
+                type="tel"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className={styles.formGroup}>
+              <label>Dirección de envío</label>
+              <input
+                type="text"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className={styles.formGroup}>
+              <label>Nota (opcional)</label>
+              <textarea
+                name="note"
+                rows="2"
+                value={formData.note}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className={styles.formGroup}>
+              <label>Comprobante de pago</label>
+              <input
+                type="file"
+                name="file"
+                accept="image/*"
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            {previewUrl && (
+              <div className={styles.previewFile}>
+                <img src={previewUrl} alt="Comprobante" />
+              </div>
+            )}
+          </form>
+        </div>
+
+        {/* ✅ Fixed footer with total */}
+        <div className={styles.fixedFooter}>
           <button
             type="submit"
+            form="purchase-form"
             className={styles.submitButton}
             disabled={uploading}
           >
-            {uploading ? 'Subiendo...' : 'Enviar pedido vía WhatsApp'}
+            {uploading
+              ? 'Enviando...'
+              : `${formatCOP(total)} | Enviar pedido vía WhatsApp`}
           </button>
-        </form>
+        </div>
       </div>
     </div>
   );

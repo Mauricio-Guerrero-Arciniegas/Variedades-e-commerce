@@ -76,14 +76,13 @@ export default function ProductPage() {
   const handleAddToCart = () => {
     addToCart({
       id: product.id,
-      name: product.title,
-      image: product.images[0],
+      title: product.title,        
+      image: product.images[0],   
       price: product.price,
       quantity: 1
     })
   }
 
-  // 💰 Función para formatear el precio en pesos colombianos
   const formatPrice = value =>
     new Intl.NumberFormat('es-CO', {
       style: 'currency',
@@ -102,7 +101,7 @@ export default function ProductPage() {
             <h1>{product.title}</h1>
             <p className={styles.price}>{formatPrice(product.price)}</p>
             <p>Categoría: {product.category}</p>
-            <p className={styles.description}>{product.description}</p> {/* <- Nueva línea */}
+            <p className={styles.description}>{product.description}</p>
 
             <div className={styles.actions}>
               <button onClick={handleAddToCart}>Agregar al carrito</button>
