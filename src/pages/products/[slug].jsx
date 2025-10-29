@@ -13,6 +13,7 @@ const PRODUCTS = [
     title: 'Bolso Azul Elegante',
     category: 'Bolsos',
     price: 60000,
+    description: 'Bolso elegante de cuero azul, ideal para cualquier ocasión. Espacioso y duradero.',
     images: [
       '/images/bolsos/bag-1/bolso1.webp',
       '/images/bolsos/bag-1/bolso2.webp',
@@ -24,13 +25,13 @@ const PRODUCTS = [
       '/images/bolsos/bag-1/bolso8.webp',
     ]
   },
-
-{
+  {
     id: 'bag-2',
     slug: 'bolso-rosa',
     title: 'Bolso Rosa Elegante',
     category: 'Bolsos',
     price: 60000,
+    description: 'Bolso rosa chic de alta calidad. Perfecto para combinar con tus outfits favoritos.',
     images: [
       '/images/bolsos/bag-2/bolso1.webp',
       '/images/bolsos/bag-2/bolso2.webp',
@@ -38,13 +39,13 @@ const PRODUCTS = [
       '/images/bolsos/bag-2/bolso4.webp'
     ]
   },
-
   {
     id: 'cl-1',
     slug: 'blusa-floral',
     title: 'Blusa Floral',
     category: 'Ropa',
     price: 55000,
+    description: 'Blusa ligera con estampado floral. Ideal para el día a día o eventos casuales.',
     images: [
       '/images/blusas/blusa1.webp',
       '/images/blusas/blusa2.webp',
@@ -101,6 +102,7 @@ export default function ProductPage() {
             <h1>{product.title}</h1>
             <p className={styles.price}>{formatPrice(product.price)}</p>
             <p>Categoría: {product.category}</p>
+            <p className={styles.description}>{product.description}</p> {/* <- Nueva línea */}
 
             <div className={styles.actions}>
               <button onClick={handleAddToCart}>Agregar al carrito</button>

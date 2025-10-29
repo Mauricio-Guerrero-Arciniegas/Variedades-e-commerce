@@ -16,11 +16,11 @@ export default function ProductCard({ product }) {
       <div className={styles.body}>
         <h3>{product.title}</h3>
         <p className={styles.price}>${product.price.toFixed(2)}</p>
+        <p className={styles.description}>{product.description}</p> {/* <- Nueva línea */}
 
         <div className={styles.actions}>
           <button
             onClick={() => {
-              console.log('Producto agregado:', product)
               addToCart(product)
             }}
           >

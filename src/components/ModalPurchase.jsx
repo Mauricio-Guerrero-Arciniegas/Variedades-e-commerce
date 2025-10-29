@@ -7,62 +7,76 @@ export default function ModalPurchase({ product, onClose }) {
   const { cart } = useCart();
   const [formData, setFormData] = useState({
     name: '',
-    email: '',
     phone: '',
     address: '',
     note: '',
     file: null,
   });
   const [uploading, setUploading] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState('');
 
+  // Usar producto individual si se pasa, sino todo el carrito
   const items = product ? [product] : cart || [];
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: files ? files[0] : value,
-    }));
+    if (files) {
+      setFormData((prev) => ({ ...prev, [name]: files[0] }));
+      setPreviewUrl(URL.createObjectURL(files[0]));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!formData.name || !formData.phone) {
+      alert('Por favor completa tu nombre y teléfono.');
+      return;
+    }
+
+    if (!formData.file) {
+      alert('Por favor adjunta el comprobante de pago.');
+      return;
+    }
+
     let fileUrl = '';
-    if (formData.file) {
-      try {
-        setUploading(true);
-        const data = new FormData();
-        data.append('file', formData.file);
-        data.append('upload_preset', 'Comprobantes de pago'); 
-        const res = await fetch('https://api.cloudinary.com/v1_1/dkfbhn3ht/image/upload', {
-          method: 'POST',
-          body: data,
-        });
-        const fileData = await res.json();
-        fileUrl = fileData.secure_url;
-      } catch (err) {
-        console.error('Error al subir imagen:', err);
-      } finally {
-        setUploading(false);
-      }
+    try {
+      setUploading(true);
+      const data = new FormData();
+      data.append('file', formData.file);
+      data.append('upload_preset', 'Comprobantes'); // tu preset de Cloudinary
+      const res = await fetch('https://api.cloudinary.com/v1_1/dkfbhn3ht/image/upload', {
+        method: 'POST',
+        body: data,
+      });
+      const fileData = await res.json();
+      fileUrl = fileData.secure_url;
+    } catch (err) {
+      console.error('Error al subir imagen:', err);
+      alert('Error al subir la imagen. Intenta de nuevo.');
+      return;
+    } finally {
+      setUploading(false);
     }
 
     const total = items.reduce((acc, item) => acc + item.price * (item.quantity || 1), 0);
 
+    // Mensaje de WhatsApp
     let message = `🧾 *Nuevo Pedido de ${formData.name}*\n\n`;
-    message += `📞 Teléfono: ${formData.phone}\n📧 Correo: ${formData.email}\n🏠 Dirección: ${formData.address}\n\n`;
+    message += `📞 Teléfono: ${formData.phone}\n🏠 Dirección: ${formData.address || 'No especificada'}\n\n`;
+    message += `💳 Realizó pago a Nequi: 300 123 4567 (Mauricio Guerrero)\n\n`;
     message += `🛍️ *Productos:*\n`;
     items.forEach((item) => {
-      message += `• ${item.title} (x${item.quantity || 1}) - $${item.price.toFixed(2)}\n`;
+      message += `• ${item.title} (x${item.quantity || 1}) - $${item.price.toLocaleString('es-CO')}\n`;
     });
-    message += `\n💰 *Total:* $${total.toFixed(2)}\n`;
+    message += `\n💰 *Total:* $${total.toLocaleString('es-CO')}\n`;
     if (formData.note) message += `📝 Nota: ${formData.note}\n`;
-    if (fileUrl) message += `📸 Comprobante: ${fileUrl}\n`;
+    message += `📸 Comprobante: ${fileUrl}\n`;
     message += `\nGracias por tu compra ❤️`;
 
-    // Número de WhatsApp al que llegan los pedidos (sin + ni espacios)
-    const phoneNumber = '573205285432'; 
+    const phoneNumber = '573205285432'; // tu número de WhatsApp sin + ni espacios
     const encodedMsg = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMsg}`;
 
@@ -87,7 +101,7 @@ export default function ModalPurchase({ product, onClose }) {
               <div>
                 <p><strong>{item.title}</strong></p>
                 <p>Cantidad: {item.quantity || 1}</p>
-                <p>Precio: ${item.price?.toFixed(2) || '0.00'}</p>
+                <p>Precio: ${item.price?.toLocaleString('es-CO')}</p>
               </div>
             </div>
           ))
@@ -95,15 +109,16 @@ export default function ModalPurchase({ product, onClose }) {
           <p>No hay productos en el carrito.</p>
         )}
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <p className={styles.paymentInfo}>
+            💳 Por favor realiza el pago en Nequi:<br />
+            Número: 3162508709<br />
+            Nombre: Fabiana Constanza Benavides
+          </p>
+
           <div className={styles.formGroup}>
             <label>Nombre completo</label>
             <input type="text" name="name" value={formData.name} onChange={handleChange} required />
-          </div>
-
-          <div className={styles.formGroup}>
-            <label>Correo electrónico</label>
-            <input type="email" name="email" value={formData.email} onChange={handleChange} required />
           </div>
 
           <div className={styles.formGroup}>
@@ -112,8 +127,8 @@ export default function ModalPurchase({ product, onClose }) {
           </div>
 
           <div className={styles.formGroup}>
-            <label>Dirección de envío</label>
-            <input type="text" name="address" value={formData.address} onChange={handleChange} required />
+            <label>Dirección de envío (opcional)</label>
+            <input type="text" name="address" value={formData.address} onChange={handleChange} />
           </div>
 
           <div className={styles.formGroup}>
@@ -123,8 +138,15 @@ export default function ModalPurchase({ product, onClose }) {
 
           <div className={styles.formGroup}>
             <label>Comprobante de pago (imagen)</label>
-            <input type="file" name="file" accept="image/*" onChange={handleChange} />
+            <input type="file" name="file" accept="image/*" onChange={handleChange} required />
           </div>
+
+          {previewUrl && (
+            <div className={styles.preview}>
+              <p>Vista previa del comprobante:</p>
+              <img src={previewUrl} alt="Preview comprobante" />
+            </div>
+          )}
 
           <button type="submit" className={styles.submitButton} disabled={uploading}>
             {uploading ? 'Subiendo...' : 'Enviar pedido vía WhatsApp'}

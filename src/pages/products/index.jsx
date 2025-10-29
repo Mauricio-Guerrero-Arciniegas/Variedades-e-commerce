@@ -10,6 +10,7 @@ const PRODUCTS = [
     title: 'Bolso Azul-Beige',
     category: 'Bolsos',
     price: 50000,
+    description: 'Bolso elegante en tonos azul y beige, perfecto para cualquier ocasión.',
     images: ['/images/bolsos/bag-1/bolso1.webp']
   },
   {
@@ -18,6 +19,7 @@ const PRODUCTS = [
     title: 'Bolso Beige-Rojo',
     category: 'Bolsos',
     price: 50000,
+    description: 'Bolso chic en colores beige y rojo, cómodo y espacioso.',
     images: ['/images/bolsos/bag-2/bolso1.webp']
   },
   {
@@ -26,6 +28,7 @@ const PRODUCTS = [
     title: 'Blusa Floral',
     category: 'Ropa',
     price: 60000,
+    description: 'Blusa ligera con estampado floral, ideal para outfits casuales.',
     images: ['/images/blusas/blusa2.webp']
   }
 ]

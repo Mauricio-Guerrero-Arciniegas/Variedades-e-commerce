@@ -1,26 +1,13 @@
+// components/CartPage.jsx
 'use client';
-import { useCart } from '../context/CartContext'; // Ajusta la ruta si tu context está en otra carpeta
-import { useState, useEffect } from 'react';
+import { useCart } from '../context/CartContext';
+import dynamic from 'next/dynamic';
 import styles from '../styles/modules/cart.module.scss';
 
-export default function CartPage() {
+function CartComponent() {
   const { cart, removeFromCart, clearCart, increaseQty, decreaseQty, totalPrice } = useCart();
-  const [mounted, setMounted] = useState(false);
 
-  // Marcar cuando el componente está montado
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  // Mostrar placeholder mientras se monta
-  if (!mounted) {
-    return (
-      <main className={styles.container}>
-        <h2>Carrito de compras</h2>
-        <p>Cargando carrito...</p>
-      </main>
-    );
-  }
+  if (!cart) return null;
 
   return (
     <main className={styles.container}>
@@ -70,3 +57,6 @@ export default function CartPage() {
     </main>
   );
 }
+
+// Import dinámico para evitar hydration
+export default dynamic(() => Promise.resolve(CartComponent), { ssr: false });
